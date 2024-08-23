@@ -10,7 +10,7 @@ class Solution {
                 s.add("Buzz");
             else{
                 
-                s.add(""+i);
+                s.add(Integer.toString(i));
             }
             }
         return s;
