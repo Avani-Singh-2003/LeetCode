@@ -1,30 +1,26 @@
 class Solution {
     public int coinChange(int[] coins, int amount) {
-         Map<Integer, Integer> memo = new HashMap<>();
-        int result = coinChangeHelper(coins, amount, memo);
-        return result == Integer.MAX_VALUE ? -1 : result;
-    }
+        
+        int[] dp = new int[amount + 1];
+        
+        // Initialize dp array with a large value
+        Arrays.fill(dp, amount + 1);
+        
+        // Base case: 0 coins are needed to make amount 0
+        dp[0] = 0;
 
-    private int coinChangeHelper(int[] coins, int amount, Map<Integer, Integer> memo) {
-        // Base cases
-        if (amount == 0) return 0;
-        if (amount < 0) return Integer.MAX_VALUE;
-
-        // If already calculated for this amount, return the stored result
-        if (memo.containsKey(amount)) return memo.get(amount);
-
-        int ans = Integer.MAX_VALUE;
-
-        for (int coin : coins) {
-            int subAns = coinChangeHelper(coins, amount - coin, memo);
-
-            if (subAns != Integer.MAX_VALUE) {
-                ans = Math.min(ans, subAns + 1);
+        // Iterate over all amounts from 1 to 'amount'
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
             }
         }
 
-        // Store the result in memoization map
-        memo.put(amount, ans);
-        return ans;
+        // If dp[amount] is still the large value, return -1
+        return dp[amount] > amount ? -1 : dp[amount];
     }
 }
+
+    
